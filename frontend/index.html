@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&libraries=geometry,drawing"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Logger</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Log Your URLs</h1>
+    <div id="map" style="height: 400px; width: 100%;"></div>
+    <button id="save-area">Save Area</button>
+    <form id="url-form">
+    <label for="url">URL:</label>
+    <input type="url" id="url" name="url" required><br><br>
+
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title"><br><br>
+
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category"><br><br>
+
+    <input type="hidden" id="north" name="north">
+    <input type="hidden" id="south" name="south">
+    <input type="hidden" id="east" name="east">
+    <input type="hidden" id="west" name="west">
+
+    <button type="submit">Save URL</button>
+    </form>
+
+    <div id="url-list"></div>
+    <script src="app.js"></script>
+</body>
+</html>
