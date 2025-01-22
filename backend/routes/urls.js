@@ -6,10 +6,11 @@ const router = express.Router();
 // Add URL
 
 router.post('/add', (req, res) => {
-    const { url, title, category, north, south, east, west } = req.body;
+    const { url, title, category, bounds } = req.body;
+    const [southwest, northeast] = JSON.parse(bounds);
 
-    const sql = 'INSERT INTO urls (url, title, category, north, south, east, west) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [url, title, category, north, south, east, west], (err, result) => {
+    const sql = 'INSERT INTO urls (url, title, category, south, west, north, east) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [url, title, category, southwest[1], southwest[0], northeast[1], northeast[0]], (err, result) => {
         if (err) {
             console.error('Error inserting data:', err.message);
             return res.status(500).send('Server error');
@@ -17,6 +18,8 @@ router.post('/add', (req, res) => {
         res.status(201).send('URL logged with area bounds!');
     });
 });
+
+
 
 router.post('/check-location', (req, res) => {
     const { latitude, longitude } = req.body;

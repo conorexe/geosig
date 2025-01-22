@@ -4,18 +4,19 @@ document.getElementById('url-form').addEventListener('submit', async (e) => {
     const url = document.getElementById('url').value;
     const title = document.getElementById('title').value;
     const category = document.getElementById('category').value;
+    const bounds = document.getElementById('bounds').value;
 
     const response = await fetch('http://localhost:3000/api/urls/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, title, category })
+        body: JSON.stringify({ url, title, category, bounds }),
     });    
 
     if (response.ok) {
-        alert('URL logged!');
+        alert('URL and area saved!');
         fetchUrls();
     } else {
-        alert('Error logging URL');
+        alert('Error saving URL');
     }
 });
 
@@ -36,71 +37,51 @@ async function fetchUrls() {
 
 fetchUrls();
 
-let map, drawingManager, selectedArea;
+mapboxgl.accessToken = 'pk.eyJ1IjoiY29ub3JmYXJyIiwiYSI6ImNtNXpscGM1YTAzYmMyaXNieGw3b2hsMWEifQ.G3l0UcUEm8vO99yqQvf94Q';
+const map = new mapboxgl.Map({
+    container: 'map', 
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: [-122.4194, 37.7749], // San Francisco
+    zoom: 13,
+});
 
-// Initialize Google Map and Drawing Tools
-function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 37.7749, lng: -122.4194 }, // Default center (San Francisco)
-        zoom: 13,
-    });
+let pins = [];
 
-    // Initialize the Drawing Manager
-    drawingManager = new google.maps.drawing.DrawingManager({
-        drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
-        drawingControl: true,
-        drawingControlOptions: {
-            position: google.maps.ControlPosition.TOP_CENTER,
-            drawingModes: [google.maps.drawing.OverlayType.RECTANGLE],
-        },
-        rectangleOptions: {
-            editable: true,
-            draggable: true,
-        },
-    });
+// Add map click interaction for placing pins
+map.on('click', (e) => {
+    if (pins.length >= 4) {
+        alert('You can only place 4 pins.');
+        return;
+    }
 
-    drawingManager.setMap(map);
+    const marker = new mapboxgl.Marker({ color: 'red' })
+        .setLngLat([e.lngLat.lng, e.lngLat.lat])
+        .addTo(map);
 
-    // Capture the rectangle coordinates when it's drawn
-    google.maps.event.addListener(drawingManager, "overlaycomplete", (event) => {
-        if (selectedArea) {
-            selectedArea.setMap(null); // Remove the previous rectangle
-        }
-        selectedArea = event.overlay;
+    pins.push([e.lngLat.lng, e.lngLat.lat]);
 
-        // Get the rectangle's bounds
-        const bounds = selectedArea.getBounds();
-        document.getElementById("north").value = bounds.getNorthEast().lat();
-        document.getElementById("south").value = bounds.getSouthWest().lat();
-        document.getElementById("east").value = bounds.getNorthEast().lng();
-        document.getElementById("west").value = bounds.getSouthWest().lng();
-    });
-}
-
-// Save the URL and area to the backend
-document.getElementById("url-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const url = document.getElementById("url").value;
-    const title = document.getElementById("title").value;
-    const category = document.getElementById("category").value;
-    const north = document.getElementById("north").value;
-    const south = document.getElementById("south").value;
-    const east = document.getElementById("east").value;
-    const west = document.getElementById("west").value;
-
-    const response = await fetch("http://localhost:3000/api/urls/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, title, category, north, south, east, west }),
-    });
-
-    if (response.ok) {
-        alert("URL and area saved!");
-    } else {
-        alert("Error saving URL");
+    if (pins.length === 4) {
+        document.getElementById('bounds').value = JSON.stringify(pins);
+        alert('4 pins placed. Bounds captured.');
     }
 });
+
+// Reset pins if needed
+function resetPins() {
+    pins.forEach((pin) => pin.remove());
+    pins = [];
+    document.getElementById('bounds').value = '';
+    alert('Pins reset. You can place new pins now.');
+}
+
+// Attach reset button (optional)
+const resetButton = document.createElement('button');
+resetButton.textContent = 'Reset Pins';
+resetButton.style.position = 'absolute';
+resetButton.style.top = '10px';
+resetButton.style.right = '10px';
+resetButton.addEventListener('click', resetPins);
+document.body.appendChild(resetButton);
 
 // Check if the user's current location is within any valid area
 document.getElementById("check-location").addEventListener("click", async () => {
@@ -127,6 +108,3 @@ document.getElementById("check-location").addEventListener("click", async () => 
         alert("Geolocation is not supported by this browser.");
     }
 });
-
-// Initialize the map when the page loads
-initMap();
