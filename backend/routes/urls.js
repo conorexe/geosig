@@ -8,7 +8,7 @@ router.post('/add', (req, res) => {
     const { url, title, category, bounds } = req.body;
     try {
         const [sw, ne] = JSON.parse(bounds);
-        const [west, south] = sw;  
+        const [west, south] = sw; 
         const [east, north] = ne;  
 
         const sql = `INSERT INTO urls
@@ -26,48 +26,13 @@ router.post('/add', (req, res) => {
             }
         );
     } catch (error) {
-        console.error('Bounds parsing error:', error);
-        res.status(400).send('Invalid bounds format');
+        console.error('parsing error:', error);
+        res.status(400).send('Invalid format');
     }
 });
 
 
-router.post('/check-location', (req, res) => {
-    const { latitude, longitude } = req.body;
 
-    if (!latitude || !longitude) {
-        return res.status(400).json({
-            error: 'Missing latitude/longitude'
-        });
-    }
-
-    const lat = parseFloat(latitude);
-    const lng = parseFloat(longitude);
-
-    if (isNaN(lat) || isNaN(lng)) {
-        return res.status(400).json({
-            error: 'Invalid coordinates'
-        });
-    }
-
-    const sql = `
-        SELECT * FROM urls
-        WHERE ? BETWEEN south AND north
-        AND ? BETWEEN west AND east
-    `;
-
-    db.query(sql, [lat, lng], (err, results) => {
-        if (err) {
-            console.error('Location check error:', err.message);
-            return res.status(500).send('Server error');
-        }
-
-        res.status(200).json({
-            valid: results.length > 0,
-            urls: results
-        });
-    });
-});
 
 
 router.get('/', (req, res) => {
@@ -81,10 +46,8 @@ router.get('/', (req, res) => {
     });
 });
 
-
 router.get('/check-url', (req, res) => {
     const { url, latitude, longitude } = req.query;
-
 
     if (!url || !latitude || !longitude) {
         return res.status(400).json({
@@ -115,10 +78,9 @@ router.get('/check-url', (req, res) => {
             });
         }
 
-
+        let withinBounds = false;
         for (const entry of results) {
             const { south, west, north, east } = entry;
-
 
             if ([south, west, north, east].some(coord => isNaN(coord))) {
                 console.error('Invalid bounds in entry:', entry.id);
@@ -134,15 +96,68 @@ router.get('/check-url', (req, res) => {
             `);
 
             if (withinLat && withinLng) {
-                return res.status(200).json({ exists: true });
+                withinBounds = true;
+                break;
             }
         }
 
-        return res.status(403).json({
-            exists: false,
-            message: 'Location not within any allowed areas for this URL'
+        res.status(200).json({
+            exists: true,
+            withinBounds: withinBounds,
+            message: withinBounds ? "url within  bounds" : "URL  outside bounds"
         });
     });
 });
 
+
+
+router.get('/check-location', (req, res) => {
+    const { lat, lng } = req.query; 
+
+    if (!lat || !lng) {
+        return res.status(400).json({ error: 'Missing latitude/longitude' });
+    }
+
+    const latitude = parseFloat(lat);
+    const longitude = parseFloat(lng);
+
+    if (isNaN(latitude) || isNaN(longitude)) {
+        return res.status(400).json({ error: 'Invalid latitude/longitude' });
+    }
+
+    const sql = `SELECT * FROM urls WHERE ? BETWEEN south AND north AND ? BETWEEN west AND east`;
+
+    db.query(sql, [latitude, longitude], (err, results) => {
+        if (err) {
+            console.error('Database error:', err.message);
+            return res.status(500).json({ error: 'error' });
+        }
+
+        res.status(200).json({
+            valid: results.length > 0,
+            urls: results
+        });
+    });
+});
+
+
+router.get('/get-areas', (req, res) => {
+    const sql = `SELECT title, south, west, north, east FROM urls`;
+
+    db.query(sql, (err, results) => {
+        if (err) {
+
+            return res.status(500).json({ error: 'error' });
+        }
+
+        res.status(200).json({
+            success: true,
+            areas: results
+        });
+    });
+});
+
+
 module.exports = router;
+
+

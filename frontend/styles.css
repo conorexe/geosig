@@ -4,7 +4,7 @@ body {
     padding: 0;
 }
 h1 {
-    color: #333;
+    color: #003366;
 }
 form {
     margin-bottom: 20px;
@@ -15,21 +15,34 @@ input {
     width: 100%;
     max-width: 400px;
 }
+
+
 button {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: black;
+    background-color: #007bff; 
+    color: black; 
     border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
     cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
 }
+
 button:hover {
     background-color: #69e882;
 }
+
 #url-list div {
     margin: 10px 0;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+}
+
+
+
+#map {
+    margin-top: 20px; 
 }
 
 .map-control {
@@ -43,6 +56,7 @@ button:hover {
     margin: 5px;
 }
 
+
 #draw-toggle {
     left: 10px;
 }
@@ -52,3 +66,328 @@ button:hover {
     min-width: 250px;
     font-family: monospace;
 }
+
+
+
+#reset-selection {
+    display: inline-block; 
+    width: auto;  
+    padding: 8px 12px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px auto; 
+}
+
+nav {
+    background-color: #f8f8f8;
+    padding: 15px 0;
+    text-align: center; 
+    border-bottom: 1px solid #ccc;
+}
+
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 8px 12px;
+    transition: color 0.3s ease-in-out;
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+
+.map-control {
+    position: absolute;
+    top: 60px;
+    z-index: 999;
+    padding: 8px 12px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 5px;
+}
+
+
+form {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+input {
+    padding: 8px;
+    margin: 5px 0;
+    width: 100%;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.header {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    position: relative;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.text-content {
+    flex: 2;
+    text-align: center;
+    padding: 20px;
+}
+
+h2 {
+    font-size: 26px;
+    color: #003366;
+}
+
+p {
+    font-size: 18px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.image {
+    flex: 1;
+    padding: 20px;
+}
+
+.image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.home-link {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.home-link:hover {
+    text-decoration: underline;
+}
+
+.contact-section {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.contact-section h2 {
+    color: #0d47a1;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+
+.contact-panel {
+    background: white;
+    padding: 30px;
+    width: 70%;
+    max-width: 800px;
+    margin: 20px auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.contact-panel h3 {
+    margin-bottom: 10px;
+    color: #0d47a1;
+    font-size: 24px;
+}
+
+.contact-panel p {
+    margin: 8px 0;
+    font-size: 18px;
+}
+
+.tutorial-section {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.tutorial-section h2 {
+    color: #0d47a1;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.tutorial-section p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.tutorial-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.tutorial-panel {
+    background: white;
+    padding: 30px;
+    width: 45%;
+    max-width: 500px;
+    min-width: 300px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.tutorial-panel h3 {
+    color: #0d47a1;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.tutorial-panel p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #0d47a1;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background: #0b3c8b;
+}
+
+.site-header {
+    background-color: #002855;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 24px;
+}
+
+.tutorial-section {
+    width: 80%;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h2 {
+    color: #002855;
+    border-bottom: 2px solid #004a99;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+h3 {
+    color: #004a99;
+    margin-top: 20px;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+.tutorial-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

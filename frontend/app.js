@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
         zoom: 10,
     });
 
-
     map.addControl(new mapboxgl.NavigationControl());
     let drawMode = false;
     let isDrawing = false;
@@ -17,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const coordDisplay = document.getElementById('coordinate-display');
     const drawToggle = document.getElementById('draw-toggle');
 
-   
+    
     drawToggle.addEventListener('click', () => {
         drawMode = !drawMode;
         drawToggle.textContent = drawMode ? 'Disable Drawing' : 'Enable Drawing';
@@ -201,3 +200,4 @@ async function fetchUrls() {
 
 
 fetchUrls();
+
